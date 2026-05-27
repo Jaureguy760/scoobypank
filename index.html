@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScoobyPanK — single-cell S2F variant effect prediction in T1D (supplement)</title>
+<meta name="description" content="Supplementary references, methods summary, datasets, and code for the CSHL poster: single-cell sequence-to-function modeling of pancreas and immune cells for variant effect prediction in type 1 diabetes.">
+<style>
+  :root{
+    --burgundy:#AE0D45; --ink:#1A1A2E; --gray:#7F8897; --blue:#2C6FBB;
+    --line:#e6e6ec; --bg:#ffffff; --soft:#faf7f8;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;color:var(--ink);background:var(--bg);
+    font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  a{color:var(--burgundy);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:860px;margin:0 auto;padding:0 22px}
+  header.hero{background:var(--burgundy);color:#fff;padding:38px 0 30px}
+  header.hero .wrap{max-width:860px}
+  header.hero h1{font-size:1.72rem;line-height:1.25;margin:0 0 14px;font-weight:700}
+  header.hero .authors{font-size:1.06rem;margin:0 0 4px}
+  header.hero .affil{font-size:.92rem;opacity:.9;margin:0 0 14px}
+  header.hero .meta{font-size:.9rem;opacity:.95}
+  header.hero .meta a{color:#fff;text-decoration:underline}
+  nav.toc{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
+    padding:10px 0;z-index:5;font-size:.86rem}
+  nav.toc .wrap{display:flex;flex-wrap:wrap;gap:6px 18px}
+  nav.toc a{color:var(--gray);font-weight:600}
+  nav.toc a:hover{color:var(--burgundy)}
+  section{padding:30px 0;border-bottom:1px solid var(--line)}
+  h2{color:var(--burgundy);font-size:1.28rem;margin:0 0 14px;border-left:4px solid var(--burgundy);padding-left:12px}
+  h3{font-size:1.02rem;margin:20px 0 6px}
+  ul{margin:0 0 0 2px;padding-left:20px}
+  li{margin:6px 0}
+  .lede{font-size:1.06rem}
+  .callout{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:16px 0}
+  .btn{display:inline-block;background:var(--burgundy);color:#fff;padding:11px 20px;border-radius:8px;
+    font-weight:700;margin:6px 0}
+  .btn:hover{text-decoration:none;opacity:.92}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.94rem}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--soft);color:var(--ink);font-weight:700}
+  .tag{display:inline-block;background:#eef1f6;color:var(--gray);border-radius:5px;
+    padding:1px 7px;font-size:.78rem;font-weight:700;margin-left:4px}
+  ol.refs{padding-left:22px}
+  ol.refs li{margin:10px 0}
+  ol.refs .src{color:var(--gray);font-size:.88rem}
+  .muted{color:var(--gray)}
+  .doi{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem}
+  footer.foot{padding:26px 0 50px;color:var(--gray);font-size:.88rem}
+  @media(max-width:640px){
+    header.hero h1{font-size:1.4rem}
+    body{font-size:16px}
+    table{font-size:.86rem}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Single-cell sequence-to-function modeling of pancreas and immune cells for large-scale variant effect prediction in type&nbsp;1 diabetes</h1>
+    <p class="authors">Jeff Jaureguy, Weston Ellison, Kyle Gaulton, Graham McVicker</p>
+    <p class="affil">Salk Institute for Biological Studies &middot; UC San Diego</p>
+    <p class="meta">CSHL &ldquo;AI in Biology&rdquo; Virtual Poster Gallery &middot; supplement &middot;
+      contact <a href="mailto:jjauregu@ucsd.edu">jjauregu@ucsd.edu</a></p>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="wrap">
+    <a href="#overview">Overview</a>
+    <a href="#poster">Poster</a>
+    <a href="#methods">Methods</a>
+    <a href="#atlas">Atlas &amp; datasets</a>
+    <a href="#code">Code</a>
+    <a href="#refs">References</a>
+    <a href="#background">Background</a>
+    <a href="#ack">Acknowledgements</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="overview">
+  <h2>Overview</h2>
+  <p class="lede">We adapt single-cell sequence-to-function (S2F) deep-learning models to
+  predict cell-type-specific regulatory effects of genetic variants in pancreas and immune
+  cells, enabling large-scale variant effect prediction (VEP) for type&nbsp;1 diabetes (T1D).</p>
+  <ul>
+    <li><strong>T1D afflicts ~10&nbsp;million people globally</strong>, with onset typically in
+      childhood; pathogenesis is driven by both genetics and environmental factors.<sup>[B1,&nbsp;B2]</sup></li>
+    <li>T1D is characterized by <strong>T-cell-mediated destruction of pancreatic &beta;-cells</strong>.<sup>[B2]</sup></li>
+    <li>T1D GWAS maps <strong>165 independent risk signals</strong> (N&nbsp;=&nbsp;817,718), and
+      <strong>&gt;90% of risk variants are non-coding</strong> &mdash; so the path from genetic
+      association to biological mechanism is hard.<sup>[1]</sup></li>
+    <li>Our approach: <strong>Borzoi&nbsp;+&nbsp;scooby</strong> S2F models, fine-tuned on a
+      733k-cell islet&nbsp;+&nbsp;immune atlas, predict cell-state-resolved variant effects and
+      benchmark them against observed eQTLs and rare-variant signals.<sup>[2,&nbsp;3,&nbsp;4,&nbsp;5]</sup></li>
+  </ul>
+</section>
+
+<section id="poster">
+  <h2>The poster</h2>
+  <p>This page is the linked supplement for the CSHL poster. The poster itself (full figures,
+  results, and the agentic future-work roadmap) is available as a PDF:</p>
+  <p><a class="btn" href="scoobypank-poster.pdf">Download the poster (PDF)</a></p>
+</section>
+
+<section id="methods">
+  <h2>Methods (high-level)</h2>
+  <p>A conceptual summary of the pipeline as presented on the poster. Detailed parameters,
+  configurations, and training code are not included here (work in progress, pre-publication).</p>
+  <ul>
+    <li><strong>Sequence-to-function backbone.</strong> <em>Borzoi</em><sup>[2]</sup> predicts
+      multi-omic coverage (RNA-seq, ATAC) from ~500&nbsp;kb of DNA sequence.</li>
+    <li><strong>Single-cell extension.</strong> <em>scooby</em><sup>[3]</sup> equips Borzoi with a
+      cell-conditioned decoder and LoRA fine-tuning to predict single-cell RNA &amp; ATAC profiles
+      from sequence, conditioned on a cell's position in a learned embedding.</li>
+    <li><strong>Reference atlas.</strong> A <em>MultiVI</em><sup>[5]</sup>-integrated atlas of
+      ~733k cells across 168 donors and 5 cohorts defines shared islet&nbsp;+&nbsp;immune cell
+      states used to condition the model.</li>
+    <li><strong>Variant effect prediction.</strong> Predicted effects are benchmarked against
+      observed single-cell eQTLs (<em>OneK1K</em><sup>[4]</sup>) and bulk-islet QTLs, and applied
+      to rare variants to surface cell-type-specific effects.</li>
+  </ul>
+</section>
+
+<section id="atlas">
+  <h2>Atlas &amp; datasets</h2>
+
+  <h3>Reference atlas &mdash; 5 cohorts (~733k cells, 168 donors)</h3>
+  <table>
+    <thead><tr><th>Cohort</th><th>Tissue(s)</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td><strong>HPAP</strong><br><span class="muted">Human Pancreas Analysis Program</span></td>
+        <td>Islets, pancreatic lymph node, spleen</td>
+        <td><a href="https://hpap.pmacs.upenn.edu">PANC-DB</a> &middot;
+          Kaestner et al. 2019 <span class="doi">10.2337/db19-0058</span></td></tr>
+      <tr><td><strong>nPOD</strong><br><span class="muted">Network for Pancreatic Organ Donors w/ Diabetes</span></td>
+        <td>Pancreas</td>
+        <td><a href="https://www.jdrfnpod.org">jdrfnpod.org</a> &middot; Campbell-Thompson et al. 2012</td></tr>
+      <tr><td><strong>Alberta</strong><br><span class="muted">ADI IsletCore</span></td>
+        <td>Islets</td>
+        <td><a href="https://www.ualberta.ca/en/alberta-diabetes/core-services/isletcore.html">IsletCore</a> &middot;
+          <a href="https://www.humanislets.com">HumanIslets.com</a></td></tr>
+      <tr><td><strong>City of Hope</strong></td><td>Islets</td>
+        <td class="muted">Internal / consortium donor cohort</td></tr>
+      <tr><td><strong>Hillblom</strong></td><td>PBMC</td>
+        <td class="muted">Internal / consortium donor cohort</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Variant-effect benchmarking datasets</h3>
+  <table>
+    <thead><tr><th>Type</th><th>Dataset</th><th>Link / DOI</th></tr></thead>
+    <tbody>
+      <tr><td>eQTL</td><td>Bulk islet &mdash; Varshney et al. 2017, PNAS</td>
+        <td><a href="https://doi.org/10.1073/pnas.1621192114"><span class="doi">10.1073/pnas.1621192114</span></a></td></tr>
+      <tr><td>caQTL</td><td>Bulk islet (RASQUAL) &mdash; Khetan et al. 2018, Diabetes</td>
+        <td><a href="https://doi.org/10.2337/db18-0393"><span class="doi">10.2337/db18-0393</span></a></td></tr>
+      <tr><td>scQTL</td><td>Internal scATAC &amp; scRNA-seq QTL</td>
+        <td class="muted">McVicker &amp; Gaulton Labs &mdash; internal</td></tr>
+      <tr><td>Rare variants</td><td>NHLBI TOPMed</td>
+        <td><a href="https://topmed.nhlbi.nih.gov">topmed.nhlbi.nih.gov</a></td></tr>
+      <tr><td>GWAS</td><td>T1D &mdash; McGrail et al. 2024</td>
+        <td><a href="https://doi.org/10.1101/2024.07.31.24311310"><span class="doi">10.1101/2024.07.31.24311310</span></a></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="code">
+  <h2>Code &amp; tools</h2>
+  <ul>
+    <li><strong>Borzoi</strong> &mdash; <a href="https://github.com/calico/borzoi">github.com/calico/borzoi</a></li>
+    <li><strong>scooby</strong> (Gagneur lab) &mdash; <a href="https://github.com/gagneurlab/scooby">github.com/gagneurlab/scooby</a></li>
+    <li><strong>scvi-tools / MultiVI</strong> &mdash; <a href="https://github.com/scverse/scvi-tools">github.com/scverse/scvi-tools</a></li>
+  </ul>
+</section>
+
+<section id="refs">
+  <h2>References</h2>
+  <p class="muted">Numbers [1]&ndash;[5] correspond to the superscript citations on the poster.</p>
+  <ol class="refs">
+    <li id="r1"><strong>McGrail C, Sears TJ, et al.</strong> Genetic association and machine learning
+      improves discovery and prediction of type 1 diabetes. <em>medRxiv</em>, 2024.
+      <span class="src">DOI: <a href="https://doi.org/10.1101/2024.07.31.24311310">10.1101/2024.07.31.24311310</a></span></li>
+    <li id="r2"><strong>Linder J, Kelley DR.</strong> Predicting RNA-seq coverage from DNA sequence as a
+      unifying model of gene regulation (Borzoi). <em>Nature Genetics</em>, 2025.
+      <span class="src">DOI: <a href="https://doi.org/10.1038/s41588-024-02053-6">10.1038/s41588-024-02053-6</a></span></li>
+    <li id="r3"><strong>Hingerl JC, Martens LD, Karollus A, Manz T, Buenrostro JD, Theis FJ, Gagneur J.</strong>
+      scooby: modeling multimodal genomic profiles from DNA sequence at single-cell resolution.
+      <em>Nature Methods</em> 22(11):2275&ndash;2285, 2025.
+      <span class="src">DOI: <a href="https://doi.org/10.1038/s41592-025-02854-5">10.1038/s41592-025-02854-5</a></span></li>
+    <li id="r4"><strong>Yazar S, Alquicira-Hernandez J, Wing K, et al.</strong> Single-cell eQTL mapping
+      identifies cell type-specific genetic control of autoimmune disease (OneK1K).
+      <em>Science</em> 376(6589):eabf3041, 2022.
+      <span class="src">DOI: <a href="https://doi.org/10.1126/science.abf3041">10.1126/science.abf3041</a></span></li>
+    <li id="r5"><strong>Ashuach T, Gabitto MI, Koodli RV, Saldi GA, Jordan MI, Yosef N.</strong>
+      MultiVI: deep generative model for the integration of multimodal data.
+      <em>Nature Methods</em> 20(8):1222&ndash;1231, 2023.
+      <span class="src">DOI: <a href="https://doi.org/10.1038/s41592-023-01909-9">10.1038/s41592-023-01909-9</a></span></li>
+  </ol>
+</section>
+
+<section id="background">
+  <h2>Background &amp; related work</h2>
+  <ol class="refs" start="1" style="list-style-type:none;padding-left:0">
+    <li id="b1"><strong>[B1] Patterson CC, et al.</strong> Worldwide estimates of incidence and
+      prevalence of type 1 diabetes. <em>Diabetes Res. Clin. Pract. / IDF Diabetes Atlas</em>, 2019.</li>
+    <li id="b2"><strong>[B2] Walker JT, et al.</strong> Type 1 diabetes staging and pancreatic
+      &beta;-cell loss. 2021.</li>
+    <li id="b3"><strong>Chiou J, Geusz RJ, Okino ML, et al.</strong> Interpreting type 1 diabetes risk
+      with genetics and single-cell epigenomics. <em>Nature</em> 594:398&ndash;402, 2021.
+      <span class="src">DOI: <a href="https://doi.org/10.1038/s41586-021-03552-w">10.1038/s41586-021-03552-w</a></span></li>
+    <li id="b4"><strong>Cuomo ASE, et al.</strong> Single-cell eQTL cross-cohort validation.
+      <em>medRxiv</em>, 2025.</li>
+  </ol>
+</section>
+
+<section id="ack">
+  <h2>Acknowledgements &amp; funding</h2>
+  <p>McVicker &amp; Gaulton Labs (UC San Diego / Salk Institute).</p>
+  <p class="muted">Funding: Salk AWS Moon Shot, Chapman Foundation, UCSD PPPF, NIH F31, STARS,
+  Sloan Foundation; GraphRAG work via Anthropic AI for Science.</p>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    Supplement for the CSHL &ldquo;AI in Biology&rdquo; virtual poster &middot;
+    contact <a href="mailto:jjauregu@ucsd.edu">jjauregu@ucsd.edu</a>.
+    Datasets are listed for attribution; access is governed by each program's data-use terms.
+  </div>
+</footer>
+
+</body>
+</html>

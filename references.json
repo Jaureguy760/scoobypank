@@ -1,0 +1,34 @@
+{
+  "_note": "Citation + dataset registry for the ScoobyPanK CSHL supplement page. DOIs verified via web search (May 2026). Poster superscripts 1-5 map to the 'tools' list below; datasets and background are supplement-only.",
+  "tools": [
+    {"n": 1, "key": "mcgrail2024", "poster_cite": "McGrail 2024 (Fig 1)", "authors": "McGrail C, Sears TJ, et al.", "year": 2024, "title": "Genetic association and machine learning improves discovery and prediction of type 1 diabetes", "venue": "medRxiv (preprint)", "doi": "10.1101/2024.07.31.24311310", "url": "https://doi.org/10.1101/2024.07.31.24311310"},
+    {"n": 2, "key": "borzoi", "poster_cite": "Borzoi (Fig 2)", "authors": "Linder J, Kelley DR.", "year": 2025, "title": "Predicting RNA-seq coverage from DNA sequence as a unifying model of gene regulation", "venue": "Nature Genetics", "doi": "10.1038/s41588-024-02053-6", "url": "https://doi.org/10.1038/s41588-024-02053-6"},
+    {"n": 3, "key": "scooby", "poster_cite": "scooby (Fig 2)", "authors": "Hingerl JC, Martens LD, Karollus A, Manz T, Buenrostro JD, Theis FJ, Gagneur J.", "year": 2025, "title": "scooby: modeling multimodal genomic profiles from DNA sequence at single-cell resolution", "venue": "Nature Methods 22(11):2275-2285", "doi": "10.1038/s41592-025-02854-5", "url": "https://doi.org/10.1038/s41592-025-02854-5"},
+    {"n": 4, "key": "onek1k", "poster_cite": "OneK1K (Fig 3)", "authors": "Yazar S, Alquicira-Hernandez J, Wing K, et al.", "year": 2022, "title": "Single-cell eQTL mapping identifies cell type-specific genetic control of autoimmune disease", "venue": "Science 376(6589):eabf3041", "doi": "10.1126/science.abf3041", "url": "https://doi.org/10.1126/science.abf3041"},
+    {"n": 5, "key": "multivi", "poster_cite": "MultiVI (Fig 5)", "authors": "Ashuach T, Gabitto MI, Koodli RV, Saldi GA, Jordan MI, Yosef N.", "year": 2023, "title": "MultiVI: deep generative model for the integration of multimodal data", "venue": "Nature Methods 20(8):1222-1231", "doi": "10.1038/s41592-023-01909-9", "url": "https://doi.org/10.1038/s41592-023-01909-9"}
+  ],
+  "atlas_cohorts": [
+    {"name": "HPAP", "full": "Human Pancreas Analysis Program", "tissues": "Islets, pancreatic lymph node, spleen", "portal": "https://hpap.pmacs.upenn.edu", "ref": "Kaestner KH, et al. Diabetes 2019;68(7):1394-1402", "doi": "10.2337/db19-0058"},
+    {"name": "nPOD", "full": "Network for Pancreatic Organ Donors with Diabetes (JDRF nPOD)", "tissues": "Pancreas", "portal": "https://www.jdrfnpod.org", "ref": "Campbell-Thompson M, et al. Diabetes Metab Res Rev 2012;28:608-617", "doi": null},
+    {"name": "Alberta", "full": "Alberta Diabetes Institute IsletCore", "tissues": "Islets", "portal": "https://www.ualberta.ca/en/alberta-diabetes/core-services/isletcore.html", "ref": "Data also via HumanIslets.com (https://www.humanislets.com)", "doi": null},
+    {"name": "City of Hope", "full": "City of Hope human islet program", "tissues": "Islets", "portal": null, "ref": "Internal/consortium donor cohort — no public accession", "doi": null},
+    {"name": "Hillblom", "full": "Hillblom cohort", "tissues": "PBMC", "portal": null, "ref": "Internal/consortium donor cohort — no public accession", "doi": null}
+  ],
+  "benchmarking_datasets": [
+    {"label": "Bulk islet eQTL", "ref": "Varshney A, et al. PNAS 2017;114(9):2301-2306", "doi": "10.1073/pnas.1621192114", "url": "https://doi.org/10.1073/pnas.1621192114"},
+    {"label": "Bulk islet caQTL (RASQUAL)", "ref": "Khetan S, et al. Diabetes 2018;67(11):2466-2477", "doi": "10.2337/db18-0393", "url": "https://doi.org/10.2337/db18-0393"},
+    {"label": "Internal scATAC & scRNA-seq QTL", "ref": "McVicker & Gaulton Labs — internal datasets (no public accession)", "doi": null, "url": null},
+    {"label": "Rare variants", "ref": "NHLBI TOPMed program", "doi": null, "url": "https://topmed.nhlbi.nih.gov"}
+  ],
+  "background": [
+    {"authors": "Chiou J, Geusz RJ, Okino ML, et al.", "year": 2021, "title": "Interpreting type 1 diabetes risk with genetics and single-cell epigenomics", "venue": "Nature 594:398-402", "doi": "10.1038/s41586-021-03552-w", "url": "https://doi.org/10.1038/s41586-021-03552-w"},
+    {"authors": "Patterson CC, et al.", "year": 2019, "title": "Worldwide estimates of incidence and prevalence of type 1 diabetes", "venue": "Diabetes Res Clin Pract / IDF Diabetes Atlas", "doi": null, "url": null},
+    {"authors": "Walker JT, et al.", "year": 2021, "title": "Type 1 diabetes staging and pancreatic beta-cell loss (review schematic)", "venue": "2021", "doi": null, "url": null},
+    {"authors": "Cuomo ASE, et al.", "year": 2025, "title": "Single-cell eQTL cross-cohort validation", "venue": "medRxiv (preprint)", "doi": null, "url": null}
+  ],
+  "code": [
+    {"name": "Borzoi", "url": "https://github.com/calico/borzoi"},
+    {"name": "scooby (Gagneur lab)", "url": "https://github.com/gagneurlab/scooby"},
+    {"name": "scvi-tools (MultiVI)", "url": "https://github.com/scverse/scvi-tools"}
+  ]
+}
